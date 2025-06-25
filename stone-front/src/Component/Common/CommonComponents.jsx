@@ -1,5 +1,35 @@
-import { getNumber } from "../../lib/dataFunc";
-import { setCurrency } from "../../lib/dataFormat";
+
+export const getNumber = (value) => {
+    let operator = "";
+    if (value[0] === "-") {
+        operator = "-";
+    }
+    let resultValue = `${operator}${value.replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1")}`;
+
+    let dotIndex = resultValue.indexOf(".");
+    if (dotIndex === -1) {
+        resultValue = resultValue = `${operator}${Number(value.replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1"))}`;
+    }
+    return resultValue;
+};
+
+export const setCurrency = (value, unit) => {
+    if (unit == undefined) unit = "";
+    if (value == undefined) return "";
+    value = value.toString().replace(/,/gi, "");
+    let regx = new RegExp(/(-?\d+)(\d{3})/);
+    let bExists = value.toString().indexOf(".", 0);
+    let strArr = value.toString().split(".");
+
+    while (regx.test(strArr[0])) {
+        strArr[0] = strArr[0].replace(regx, "$1,$2");
+    }
+
+    if (bExists > -1) value = `${strArr[0]}.${strArr[1]}`;
+    else value = strArr[0];
+
+    return value + unit;
+};
 
 const LabelSelect = (props) => {
     let param = props.param;
@@ -106,9 +136,76 @@ const Input = (props) => {
     );
 };
 
+const getRefArray = (ref) => {
+    let refChildren = ref.current.querySelectorAll("input, select");
+    let refArray = [...refChildren];
+    return refArray;
+};
+
+const searchParam = (paramArr) => {
+    let params = {};
+    paramArr
+        .filter((x) => !isEmptyVar(x.name))
+        .forEach(({ name, value, type, checked, list, className, dataset }) => {
+            if (type === "checkbox") {
+                if (className == "multiCheck") {
+                    if (checked) {
+                        if (isEmptyVar(params[name])) {
+                            params[name] = `${dataset.value}`;
+                        } else {
+                            params[name] += `,${dataset.value}`;
+                        }
+                    }
+                } else {
+                    params[name] = checked;
+                }
+            } else if (!isEmptyVar(list)) {
+                params[name] = isEmptyVar(value) ? "" : list.querySelector(`option[value='${value}']`).dataset.value;
+            } else {
+                params[name] = value;
+            }
+        });
+    return params;
+};
+
+const isEmptyObj = (obj) => {
+    if (isEmptyVar(obj)) return true;
+    if ((obj.constructor === Object || obj.constructor === Array) && Object.keys(obj).length === 0) {
+        return true;
+    }
+
+    return false;
+};
+
+const setCommonCodeState = async (param, setCommonCode) => {
+    let codeList;
+    switch (param) {
+        case "MENU_CODE":
+            codeList = await getMenuCodeList();
+            break;
+        case "MKT_OWN_CODE":
+            codeList = await getMktOwnCodeList();
+            break;
+        case "PRDT_CODE":
+            codeList = await getPrdtCodeList();
+            break;
+        case "CLNT_CODE":
+            codeList = await getClntCodeList();
+            break;
+        default:
+            codeList = await getCommonCodeList(param);
+            break;
+    }
+    setCommonCode(codeList);
+};
+
 export {
     LabelSelect,
     Select,
     LabelInput,
-    Input
+    Input,
+    getRefArray,
+    searchParam,
+    isEmptyObj,
+    setCommonCodeState,
 };
