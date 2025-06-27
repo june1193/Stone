@@ -1,11 +1,9 @@
 package com.project.service;
-import com.project.mapper.FileDataMapper;
+//import com.project.mapper.FileDataMapper;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -16,11 +14,11 @@ import java.util.Map;
 @Service
 public class FileService {
 
-    private final FileDataMapper fileDataMapper;
+    //private final FileDataMapper fileDataMapper;
 
-    public FileService(FileDataMapper fileDataMapper) {
-        this.fileDataMapper = fileDataMapper;
-    }
+    //public FileService(FileDataMapper fileDataMapper) {
+       // this.fileDataMapper = fileDataMapper;
+   // }
 
     public String generateFile(String fileName, String readYm) throws IOException {
         //List<Map<String, Object>> data = fileDataMapper.selectAutoPayData(readYm);
@@ -54,7 +52,7 @@ public class FileService {
         new File(dirPath).mkdirs();
 
         String filePath = dirPath + "/" + fileName + ".txt";
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath), StandardCharsets.UTF_8))) {
             writer.write(sb.toString());
         }
 

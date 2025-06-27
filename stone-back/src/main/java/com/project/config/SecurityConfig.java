@@ -14,8 +14,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .anyRequest().permitAll()
                 )
-                .csrf().disable() // 개발 중에는 꺼도 됨
-                .formLogin().disable(); // 로그인 화면 비활성화
+                .csrf(csrf -> csrf.disable())
+                .formLogin(form -> form.disable());
         return http.build();
     }
 }
