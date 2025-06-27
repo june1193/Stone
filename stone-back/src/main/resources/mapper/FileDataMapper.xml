@@ -5,7 +5,7 @@
 <mapper namespace="com.project.mapper.FileDataMapper">
     <select id="selectAutoPayData" parameterType="string" resultType="map">
         SELECT *
-          FROM YOUR_TABLE
-         WHERE READ_YM = #{readYm}
+          FROM FILE_TBL
+         WHERE READ_YM = #{READYM}
     </select>
 </mapper>
