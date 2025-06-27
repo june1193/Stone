@@ -8,40 +8,52 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
 public class FileService {
 
-    private final FileDataMapper mapper; // 마이바티스 or JPA 매퍼
+    private final FileDataMapper fileDataMapper;
 
-    public FileService(FileDataMapper  mapper) {
-        this.mapper = mapper;
+    public FileService(FileDataMapper fileDataMapper) {
+        this.fileDataMapper = fileDataMapper;
     }
 
     public String generateFile(String fileName, String readYm) throws IOException {
-        // 1. DB에서 데이터 조회
-        List<Map<String, Object>> records = mapper.selectAutoPayData(readYm);
+        //List<Map<String, Object>> data = fileDataMapper.selectAutoPayData(readYm);
 
-        // 2. 현재 시각
+        // 2. 임시 데이터 (DB 대신)
+        List<Map<String, Object>> data = new ArrayList<>();
+
+        Map<String, Object> row1 = new HashMap<>();
+        row1.put("USER_NAME", "박명수");
+        row1.put("AMOUNT", 12000);
+
+        Map<String, Object> row2 = new HashMap<>();
+        row2.put("USER_NAME", "유재석");
+        row2.put("AMOUNT", 15000);
+
+        data.add(row1);
+        data.add(row2);
+
+
         String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-        // 3. 내용 구성
         StringBuilder sb = new StringBuilder();
-        sb.append("파일 생성 시각: ").append(now).append("\n");
-        sb.append("조회 연월: ").append(readYm).append("\n\n");
+        sb.append("생성시각: ").append(now).append("\n");
+        sb.append("조회연월: ").append(readYm).append("\n\n");
 
-        for (Map<String, Object> row : records) {
+        for (Map<String, Object> row : data) {
             sb.append(row.toString()).append("\n");
         }
 
-        // 4. 파일 생성
-        String path = System.getProperty("user.dir") + "/generated";
-        File dir = new File(path);
-        if (!dir.exists()) dir.mkdirs();
+        String dirPath = System.getProperty("user.dir") + "/generated";
+        new File(dirPath).mkdirs();
 
-        String filePath = path + "/" + fileName + ".txt";
+        String filePath = dirPath + "/" + fileName + ".txt";
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             writer.write(sb.toString());
         }
