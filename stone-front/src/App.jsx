@@ -3,21 +3,25 @@ import { LicenseInfo } from "@mui/x-license-pro";
 import { MUI_LICENSE_KEY } from "./license";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from "./View/Home.jsx";
-import AuthByMenuManage from './View/Standard/AuthByMenuManage.jsx';
+import File from './View/Skills/File.jsx';
+import Grid from './View/Skills/Grid.jsx';
+import Chart from './View/Skills/Chart.jsx';
 
 
 function App() {
     LicenseInfo.setLicenseKey(MUI_LICENSE_KEY);
     /*
-    @mui/x-data-grid-pro 6.x ¹öÀüÀº React 17, 18¸¸ Áö¿ø
-    ÇöÀç ÇÁ·ÎÁ§Æ®´Â React 19 »ç¿ë ÁßÀÌ¶ó Áö¿ø ¾ÈµÊ -> ¸®¿¢Æ® ´Ù¿î±×·¹ÀÌµå
+    @mui/x-data-grid-pro 6.x ë²„ì „ì€ React 17, 18ë§Œ ì§€ì›
+    í˜„ì¬ í”„ë¡œì íŠ¸ëŠ” React 19 ì‚¬ìš© ì¤‘ì´ë¼ ì§€ì› ì•ˆë¨ -> ë¦¬ì—‘íŠ¸ ë‹¤ìš´ê·¸ë ˆì´ë“œ
     */
 
   return (
       <Router>
           <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/Pagetwo" element={<AuthByMenuManage />} />
+              <Route path="/file-test" element={<File />} />
+              <Route path="/grid-test" element={<Grid />} />
+              <Route path="/chart-test" element={<Chart />} />
           </Routes>
       </Router>
   )
