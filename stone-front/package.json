@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@mui/x-data-grid-pro": "^8.5.3",
+    "@mui/x-data-grid-pro": "^7.22.0",
     "@mui/x-license-pro": "^6.10.2",
     "axios": "^1.10.0",
     "lodash": "^4.17.21",
