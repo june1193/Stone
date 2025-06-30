@@ -177,6 +177,13 @@ const isEmptyObj = (obj) => {
     return false;
 };
 
+const isEmptyVar = (variable) => {
+    if (variable === "" || variable === null || variable === undefined) {
+        return true;
+    }
+    return false;
+};
+
 const setCommonCodeState = async (param, setCommonCode) => {
     let codeList;
     switch (param) {
@@ -208,4 +215,5 @@ export {
     searchParam,
     isEmptyObj,
     setCommonCodeState,
+    isEmptyVar,
 };
